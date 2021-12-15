@@ -1,15 +1,12 @@
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { unix } from "dayjs"
+import { useEffect, useMemo, useRef, useState } from "react"
+// import { unix } from "dayjs"
 import { AiOutlineCloudUpload, AiOutlineClose, AiOutlineLink, AiOutlineQuestionCircle, AiOutlineCloseCircle } from "react-icons/ai"
-
-// import { mockFetch, wrapPromise } from "./utils"
 import { Modal } from "./modal"
 
 import type { FC, ChangeEvent, MouseEvent } from "react"
-import type { DataEntity, UploadFileResponse, UploadFileResponseSuccess, UploadFileResponseError } from "./interface"
-import { data } from "autoprefixer"
-import { useDragging } from "./useDragging"
+import type { UploadFileResponse, UploadFileResponseSuccess, UploadFileResponseError } from "./interface"
+
 const Topbar: FC = ({ }) => {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
   const handleDescriptionClose = () => setIsDescriptionOpen(false)
@@ -68,18 +65,6 @@ const Topbar: FC = ({ }) => {
   )
 }
 
-const BottomBar: FC = ({ }) => {
-  return (
-    <div className="w-screen h-16 px-4 fixed inset-x-0 bottom-0 flex justify-center items-center">
-      <div className="text-orange-300">
-        {/* <a href="" className="m-4">GITHUB</a>
-        <a href="" className="m-4">BILIBILI</a> */}
-
-      </div>
-    </div>
-  )
-}
-
 const Container: FC = ({ children }) => {
   return <div className="w-screen h-screen overflow-hidden bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500">
     <div className="w-full h-full flex justify-center items-center">
@@ -119,7 +104,6 @@ type ImageUploadInputProps = {
 }
 
 const ImageUploadInput: FC<ImageUploadInputProps> = ({ file, setFile }) => {
-  const labelRef = useRef<HTMLLabelElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -167,19 +151,6 @@ const ImageUploadArea: FC = ({ children }) => {
   )
 }
 
-// type ButtonAreaProps = {
-//   onReset: () => void
-//   onSearch: () => void
-// }
-// export const ButtonArea: FC<ButtonAreaProps> = ({ onReset, onSearch }) => {
-//   return (
-//     <div className="my-4 flex justify-center items-center">
-//       <button className="px-8 py-2 mx-2 text-white bg-transparent border-2 border-white rounded-full" onClick={onReset}>重置图片</button>
-//       <button className="px-8 py-2 mx-2 text-orange-500 bg-white border-2 border-white rounded-full" onClick={onSearch}>搜索出处</button>
-//     </div>
-//   )
-// }
-
 type ProgressCircle = {
   progress: number
 }
@@ -197,14 +168,6 @@ const ProgressCircle: FC<ProgressCircle> = ({ progress }) => {
     </div>
   )
 }
-
-// const fetchUploadFileResponse = (file: File) => {
-//   const method = "POST"
-//   const body = new FormData()
-//   body.append("file", file)
-//   // return wrapPromise(fetch(imageUploadUrl, { method, body }).then<UploadFileResponse>(res => res.json()))
-//   return wrapPromise(mockFetch())
-// }
 
 const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max)
 
@@ -225,7 +188,6 @@ const ResultContent: FC<ResultContentProps> = ({ res }) => {
               <a href={`https://t.bilibili.com/${item.detail.dynamic_id}`} target="_blank">
                 <span className="font-bold">@{item.detail.author_name}: </span>
                 <span className="">{item.detail.content}</span>
-                {/* <span className="text-orange-600 text-sm">{unix(item.detail.create_time).format("YYYY/M/D")}</span> */}
               </a>
             </p>
 
@@ -245,7 +207,6 @@ const ResultContent: FC<ResultContentProps> = ({ res }) => {
   )
 }
 
-
 type ResultContentWithErrorProps = {
   res: UploadFileResponseError
 }
@@ -259,8 +220,6 @@ const ResultContentWithError: FC<ResultContentWithErrorProps> = ({ res }) => {
     </div >
   )
 }
-
-
 
 const ResultContentFallBack: FC = ({ }) => {
   return (
@@ -286,8 +245,6 @@ const ResultContentFallBack: FC = ({ }) => {
     </div>
   )
 }
-
-
 
 type ResultProps = {
   isOpen: boolean
@@ -334,7 +291,6 @@ export const App: FC = () => {
     setIsResultOpen(false)
   }
 
-  const handleReset = () => setFile(null)
   const handleSearch = () => {
     if (file && !isResultOpen) {
       setUploadFileResponse(null)
@@ -388,7 +344,6 @@ export const App: FC = () => {
         </Result>
       )}
     </Container>
-    <BottomBar />
   </>)
 }
 
