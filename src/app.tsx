@@ -1,8 +1,84 @@
 
-import { useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { unix } from "dayjs"
+import { AiOutlineCloudUpload, AiOutlineClose, AiOutlineLink, AiOutlineQuestionCircle, AiOutlineCloseCircle } from "react-icons/ai"
+
+// import { mockFetch, wrapPromise } from "./utils"
 import { Modal } from "./modal"
 
-import type { RefObject, ChangeEvent, FC } from "react"
+import type { FC, ChangeEvent, MouseEvent } from "react"
+import type { DataEntity, UploadFileResponse, UploadFileResponseSuccess, UploadFileResponseError } from "./interface"
+import { data } from "autoprefixer"
+import { useDragging } from "./useDragging"
+const Topbar: FC = ({ }) => {
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
+  const handleDescriptionClose = () => setIsDescriptionOpen(false)
+  const handleModalClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      handleDescriptionClose()
+    }
+  }
+  return (
+    <div className="w-screen h-16 px-4 fixed inset-0 flex justify-between items-center z-10">
+      <div className="text-white">
+        <div className="flex justify-center items-baseline">
+          <svg className="inline" height="24" viewBox="0 0 102 39" fill="" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.3431 26.5747H32.9367L19.5976 0L4.33245 30.4093L0 39H10.5953L14.0837 32.0841L19.5976 21.1093L22.3431 26.5747Z" fill="#ffffff" />
+            <path d="M42.2637 2.21238C36.4344 2.21238 31.6923 7.04446 31.6923 12.9922V13.1812C31.6782 15.3523 32.3212 17.4754 33.5342 19.2636C33.9209 19.8771 34.3717 20.4464 34.8789 20.9617L34.8976 20.9807C36.8686 22.9286 39.5129 24.0152 42.2637 24.0076H54.0498C54.7537 24.0135 55.4271 24.2999 55.925 24.8051C56.4228 25.3103 56.7052 25.9938 56.7112 26.7084C56.7019 27.4219 56.4185 28.1036 55.9214 28.6081C55.4243 29.1126 54.7527 29.4 54.0498 29.4092L19.3698 29.5032L14.7152 38.9586H54.383C54.4306 38.9482 54.4995 38.9327 54.5811 38.9128C59.5255 37.729 65.7951 33.079 66.1121 26.7886C66.2864 23.332 64.606 20.5251 63.3922 18.9365L63.3284 18.8554L63.2553 18.7812C63.2426 18.7683 63.206 18.7234 63.1796 18.6949C63.115 18.6155 63.0284 18.5111 62.9179 18.3946C61.785 17.1411 60.4081 16.1401 58.8742 15.4551C57.3403 14.77 55.683 14.4159 54.0073 14.4151H42.2637C41.9549 14.4111 41.6598 14.2848 41.4413 14.0632C41.2229 13.8416 41.0983 13.5421 41.0941 13.2286V13.0388C41.0996 12.725 41.2252 12.4257 41.4443 12.2042C41.6634 11.9828 41.9588 11.8566 42.2679 11.8524L97.2502 11.7186L102 2.25639L42.2637 2.21238Z" fill="#ffffff" />
+            <path d="M68.2108 25.3762V38.9586H77.6339L77.6603 25.3762C77.6642 25.0627 77.7886 24.7631 78.0069 24.5414C78.2252 24.3196 78.5202 24.1931 78.829 24.1888H90.9908L95.8052 14.5972H78.7823C72.953 14.5972 68.2108 19.4327 68.2108 25.3762Z" fill="#ffffff" />
+          </svg>
+          <span className="ml-1 text-xl tracking-wider relative bottom-0.5">搜图姬</span>
+        </div>
+      </div>
+      <div>
+        <button onClick={() => setIsDescriptionOpen(true)} className="m-4 text-white"><AiOutlineQuestionCircle className="inline" size={24} /></button>
+        <Modal isOpen={isDescriptionOpen} onClose={handleDescriptionClose}>
+          <div className="w-full h-full flex flex-col justify-end md:justify-center items-center" onClick={handleModalClick} >
+            <div className="w-full h-[85vh] max-w-[40rem] max-h-[40rem] bg-white shadow-md rounded-2xl md:rounded">
+              <div className="w-full h-full flex flex-col items-center divide-y-2">
+                <div className="w-full flex justify-between items-center">
+                  <h2 className="p-4 font-bold">
+                    搜图姬介绍
+                  </h2>
+                  <button className="w-14 h-14 flex justify-center items-center focus:outline-none" onClick={handleDescriptionClose} onKeyDown={handleDescriptionClose}><AiOutlineClose size={18} /></button>
+                </div>
+                <div className="w-full overflow-y-scroll flex flex-col justify-center items-center">
+                  <div className="w-full">
+                    <div className="p-4 m-4 rounded-xl bg-sky-200 shadow">
+                      <p className="mb-1">
+                        本网站用于搜索 A-SOUL B站相关Tag下的动态图片
+                      </p>
+                      <p className="mb-1">
+                        图片搜索算法为pHash，所以有时搜到的图会不太准确，望谅解！
+                      </p>
+                    </div>
+                    <div className="p-4 m-4 rounded-xl bg-indigo-200 shadow">
+                      <p className="mb-1">
+                        作者：<a href="https://space.bilibili.com/32957695" target="_blank" className="hover:underline">晓轩iMIKU</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      </div>
+    </div >
+  )
+}
+
+const BottomBar: FC = ({ }) => {
+  return (
+    <div className="w-screen h-16 px-4 fixed inset-x-0 bottom-0 flex justify-center items-center">
+      <div className="text-orange-300">
+        {/* <a href="" className="m-4">GITHUB</a>
+        <a href="" className="m-4">BILIBILI</a> */}
+
+      </div>
+    </div>
+  )
+}
 
 const Container: FC = ({ children }) => {
   return <div className="w-screen h-screen overflow-hidden bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500">
@@ -13,74 +89,230 @@ const Container: FC = ({ children }) => {
     </div>
   </div>
 }
-
-type ImageUploadAreaProps = {
-  imagePreviewSrc: string | null
-  onInputChange: (e: ChangeEvent<HTMLInputElement>) => void
-  inputRef: RefObject<HTMLInputElement>
+type ImagePreviewProps = {
+  file: File
+  setFile: (file: File | null) => void
 }
-const ImageUploadArea: FC<ImageUploadAreaProps> = ({ imagePreviewSrc, onInputChange, inputRef }) => {
+const ImagePreview: FC<ImagePreviewProps> = ({ file, setFile }) => {
+  const src = useMemo(() => file ? URL.createObjectURL(file) : "#", [file])
+
+  const handleClose = () => setFile(null)
+
   return (
-    <div className="w-[20rem] h-[20rem] border-2 border-dashed border-white flex flex-col justify-center items-center">
-      {imagePreviewSrc
-        ? <img className="w-full h-full object-contain" id="preview" src={imagePreviewSrc} alt="your image" />
-        : <label className="block w-full h-full flex justify-center items-center cursor-pointer" htmlFor="image-upload">
-          <input type="file" id="image-upload" accept="image/*" style={{ display: "none" }} onChange={onInputChange} ref={inputRef} />
-          <div className="w-[6rem] fill-white">
-            <svg className="icon" viewBox="0 0 1024 1024" version="1.1"
-              xmlns="http://www.w3.org/2000/svg" p-id="8180" width="100%" height="100%">
-              <path
-                d="M518.3 459c-3.2-4.1-9.4-4.1-12.6 0l-112 141.7c-4.1 5.2-0.4 12.9 6.3 12.9h73.9V856c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V613.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 459z"
-                p-id="8181"></path>
-              <path
-                d="M811.4 366.7C765.6 245.9 648.9 160 512.2 160S258.8 245.8 213 366.6C127.3 389.1 64 467.2 64 560c0 110.5 89.5 200 199.9 200H304c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8h-40.1c-33.7 0-65.4-13.4-89-37.7-23.5-24.2-36-56.8-34.9-90.6 0.9-26.4 9.9-51.2 26.2-72.1 16.7-21.3 40.1-36.8 66.1-43.7l37.9-9.9 13.9-36.6c8.6-22.8 20.6-44.1 35.7-63.4 14.9-19.2 32.6-35.9 52.4-49.9 41.1-28.9 89.5-44.2 140-44.2s98.9 15.3 140 44.2c19.9 14 37.5 30.8 52.4 49.9 15.1 19.3 27.1 40.7 35.7 63.4l13.8 36.5 37.8 10C846.1 454.5 884 503.8 884 560c0 33.1-12.9 64.3-36.3 87.7-23.4 23.4-54.5 36.3-87.6 36.3H720c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h40.1C870.5 760 960 670.5 960 560c0-92.7-63.1-170.7-148.6-193.3z"
-                p-id="8182"></path>
-            </svg>
+    <div className="w-full h-full relative">
+      <img
+        className="w-full h-full object-contain"
+        id="preview"
+        src={src}
+        alt="your image"
+      />
+      <div className="w-full h-full absolute inset-0">
+        <AiOutlineCloseCircle className="cursor-pointer fill-orange-400 bg-orange-200 rounded-full absolute -top-[14px] -right-[14px]" size={28} onClick={handleClose} />
+      </div>
+    </div>
+  )
+}
+
+type ImageUploadInputProps = {
+  file: File | null
+  setFile: (file: File) => void
+}
+
+const ImageUploadInput: FC<ImageUploadInputProps> = ({ file, setFile }) => {
+  const labelRef = useRef<HTMLLabelElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const input = inputRef.current
+    if (input && !file) {
+      input.value = ""
+    }
+  }, [file, inputRef])
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputFiles = e.target.files
+    if (inputFiles && inputFiles.length > 0) {
+      setFile(inputFiles[0])
+    }
+  }
+
+
+  return (
+    <label
+      className="block w-full h-full flex justify-center items-center cursor-pointer"
+      htmlFor="image-upload"
+      onDragOver={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+      }}
+      onDrop={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setFile(e.dataTransfer.files[0])
+      }}
+    >
+      <input type="file" id="image-upload" accept="image/*" style={{ display: "none" }} onChange={handleInputChange} ref={inputRef} />
+      <div className="w-[6rem] fill-white">
+        <AiOutlineCloudUpload className="fill-white" size={96} />
+      </div>
+    </label>
+  )
+}
+
+const ImageUploadArea: FC = ({ children }) => {
+  return (
+    <div className="w-[20rem] h-[20rem] aspect-square border-2 border-dashed border-white flex flex-col justify-center items-center">
+      {children}
+    </div>
+  )
+}
+
+// type ButtonAreaProps = {
+//   onReset: () => void
+//   onSearch: () => void
+// }
+// export const ButtonArea: FC<ButtonAreaProps> = ({ onReset, onSearch }) => {
+//   return (
+//     <div className="my-4 flex justify-center items-center">
+//       <button className="px-8 py-2 mx-2 text-white bg-transparent border-2 border-white rounded-full" onClick={onReset}>重置图片</button>
+//       <button className="px-8 py-2 mx-2 text-orange-500 bg-white border-2 border-white rounded-full" onClick={onSearch}>搜索出处</button>
+//     </div>
+//   )
+// }
+
+type ProgressCircle = {
+  progress: number
+}
+
+const ProgressCircle: FC<ProgressCircle> = ({ progress }) => {
+  return (
+    <div className="w-12 h-12 relative">
+      <svg className="-rotate-90" width="100%" height="100%" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" strokeWidth="12" />
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#f77a52" strokeWidth="12" pathLength="100" strokeDasharray={100} strokeDashoffset={100 - progress} />
+      </svg>
+      <div className="w-full h-full absolute inset-0 flex justify-center items-center">
+        <span className="text-orange-700 text-[12px]">{`${progress.toFixed(0)}%`}</span>
+      </div>
+    </div>
+  )
+}
+
+// const fetchUploadFileResponse = (file: File) => {
+//   const method = "POST"
+//   const body = new FormData()
+//   body.append("file", file)
+//   // return wrapPromise(fetch(imageUploadUrl, { method, body }).then<UploadFileResponse>(res => res.json()))
+//   return wrapPromise(mockFetch())
+// }
+
+const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max)
+
+type ResultContentProps = {
+  res: UploadFileResponseSuccess
+}
+
+const ResultContent: FC<ResultContentProps> = ({ res }) => {
+  return (
+    <div className="w-full h-full">
+      {res.data.map(item => (
+        <div className="m-4 bg-orange-200 rounded-xl overflow-hidden shadow flex" key={item.detail.dynamic_id}>
+          <div className="flex-none w-24 h-24 relative">
+            <img src={item.detail.src_url + "@96w_96h_1c_100q.webp"} alt="" />
           </div>
-        </label>
-      }
+          <div className="p-2 flex-auto flex flex-col justify-between">
+            <p className="mt-1 line-clamp-2 break-all text-sm text-orange-700 hover:underline underline-offset-2">
+              <a href={`https://t.bilibili.com/${item.detail.dynamic_id}`} target="_blank">
+                <span className="font-bold">@{item.detail.author_name}: </span>
+                <span className="">{item.detail.content}</span>
+                {/* <span className="text-orange-600 text-sm">{unix(item.detail.create_time).format("YYYY/M/D")}</span> */}
+              </a>
+            </p>
+
+            <div className="flex justify-between items-center">
+              <a className="text-orange-700 text-sm" href={item.detail.src_url} target="_blank">
+                <AiOutlineLink className="inline" size={18} />
+                <span className="relative top-[1px]">高清原图</span>
+              </a>
+            </div>
+          </div>
+          <div className="flex-none w-[4rem] h-24 relative flex justify-center items-center">
+            <ProgressCircle progress={item.similarity * 100}></ProgressCircle>
+          </div>
+        </div>
+      ))}
+    </div >
+  )
+}
+
+
+type ResultContentWithErrorProps = {
+  res: UploadFileResponseError
+}
+
+const ResultContentWithError: FC<ResultContentWithErrorProps> = ({ res }) => {
+  return (
+    <div className="w-full h-full p-4">
+      <div className="p-4 bg-red-200 rounded-xl text-red-500">
+        {res.message}
+      </div>
+    </div >
+  )
+}
+
+
+
+const ResultContentFallBack: FC = ({ }) => {
+  return (
+    <div className="w-full h-full">
+      {[0, 1, 2, 3].map((item, index) => (
+        <div className="animate-pulse m-4 bg-orange-200 rounded-xl overflow-hidden shadow flex" key={index}>
+          <div className="flex-none w-24 h-24 bg-orange-100"></div>
+          <div className="flex-auto flex">
+            <div className="p-4 flex-auto flex flex-col justify-between">
+              <div className="">
+                <p className="h-2 my-2 bg-orange-300"></p>
+                <p className="h-2 my-2 bg-orange-300"></p>
+              </div>
+              <div className="">
+                <p className="w-12 h-2 my-2 bg-orange-300"></p>
+              </div>
+            </div>
+            <div className="flex-none flex w-[4rem] h-24 justify-center items-center">
+              <ProgressCircle progress={0} />
+            </div>
+          </div>
+        </div>))}
     </div>
   )
 }
 
-type ButtonAreaProps = {
-  onReset: () => void
-  onSearch: () => void
-}
-export const ButtonArea: FC<ButtonAreaProps> = ({ onReset, onSearch }) => {
-  return (
-    <div className="my-4 flex justify-center items-center">
-      <button className="px-8 py-2 mx-2 text-white bg-transparent border-2 border-white rounded-full" onClick={onReset}>重置图片</button>
-      <button className="px-8 py-2 mx-2 text-orange-500 bg-white border-2 border-white rounded-full" onClick={onSearch}>搜索出处</button>
-    </div>
-  )
-}
+
 
 type ResultProps = {
   isOpen: boolean
   onClose: () => void
 }
 
-export const Result: FC<ResultProps> = ({ isOpen, onClose }) => {
+export const Result: FC<ResultProps> = ({ isOpen, onClose, children }) => {
+  const handleModalClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose()
+    }
+  }
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="w-full h-full flex flex-col justify-center items-center" >
-        <div className="w-11/12 h-5/6 max-w-screen-md max-h-screen-sm bg-white shadow-md rounded-xl">
+      <div className="w-full h-full flex flex-col justify-end md:justify-center items-center" onClick={handleModalClick} >
+        <div className="w-full h-[85vh] max-w-[40rem] max-h-[40rem] bg-white shadow-md rounded-t-2xl md:rounded">
           <div className="w-full h-full flex flex-col items-center divide-y-2">
             <div className="w-full flex justify-between items-center">
               <h2 className="p-4 font-bold">
                 搜索结果
               </h2>
-              {/* <button className="w-14 h-14 flex justify-center items-center focus:outline-none" onClick={onClose} onKeyDown={onClose}><MdClose size={24}/></button>  */}
+              <button className="w-14 h-14 flex justify-center items-center focus:outline-none" onClick={onClose} onKeyDown={onClose}><AiOutlineClose size={18} /></button>
             </div>
-            <div className="p-4 overflow-y-scroll">
-            </div>
-            <div className="w-full flex justify-center items-center">
-              <div className="w-full max-w-sm p-4 flex justify-around items-center">
-                <button className="w-36 mx-2 py-2 px-4 text-center bg-fuchsia-700 text-fuchsia-100 rounded-full border border-fuchsia-700 focus:outline-none" onClick={onClose}>
-                  完成
-                </button>
-              </div>
+            <div className="w-full overflow-y-scroll flex flex-col justify-center items-center">
+              {children}
             </div>
           </div>
         </div>
@@ -89,44 +321,74 @@ export const Result: FC<ResultProps> = ({ isOpen, onClose }) => {
   )
 }
 
+const imageUploadUrl = import.meta.env.VITE_APP_IMAGE_UPLOAD_URL
+
 export const App: FC = () => {
   const [file, setFile] = useState<File | null>(null)
-
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (files && files.length > 0) {
-      setFile(files[0])
-    }
-  }
-
-  const imagePreviewSrc = useMemo(() => file ? URL.createObjectURL(file) : null, [file])
-
   const [isResultOpen, setIsResultOpen] = useState(false)
-  const handleResultClose = () => setIsResultOpen(false)
-  const handleReset = () => {
-    const input = inputRef.current
-    if (input) {
-      input.value = ""
-    }
-    setFile(null)
+  const [uploadFileResponse, setUploadFileResponse] = useState<UploadFileResponse | null>(null)
+
+
+  const handleResultClose = () => {
+    setUploadFileResponse(null)
+    setIsResultOpen(false)
   }
+
+  const handleReset = () => setFile(null)
   const handleSearch = () => {
-    if (file) {
-      const data = new FormData();
-      data.append("file", file)
+    if (file && !isResultOpen) {
+      setUploadFileResponse(null)
       setIsResultOpen(true)
     } else {
       alert("请选择图片！")
     }
   }
 
-  return <>
+
+  useEffect(() => {
+    if (file && isResultOpen) {
+      const method = "POST"
+      const body = new FormData()
+      body.append("file", file)
+      // mockFetch()
+      // .then(res => setUploadFileResponse(res))
+      fetch(imageUploadUrl, { method, body })
+        .then<UploadFileResponse>(res => res.json())
+        .then(res => setUploadFileResponse(res))
+        .catch(err => {
+          setUploadFileResponse({
+            code: 0,
+            message: "服务器遇到了一些问题"
+          })
+        })
+    }
+  }, [file, isResultOpen])
+  return (<>
+    <Topbar />
     <Container>
-      <ImageUploadArea onInputChange={handleInputChange} imagePreviewSrc={imagePreviewSrc} inputRef={inputRef} />
-      <ButtonArea onReset={handleReset} onSearch={handleSearch} />
-      <Result isOpen={isResultOpen} onClose={handleResultClose} />
+      <ImageUploadArea>
+        {file
+          ? <ImagePreview file={file} setFile={setFile} />
+          : <ImageUploadInput file={file} setFile={setFile} />
+        }
+      </ImageUploadArea>
+      <div className="my-4 flex justify-center items-center">
+        {/* <button className="px-8 py-2 mx-2 text-white bg-transparent border-2 border-white rounded-full" onClick={handleReset}>重置图片</button> */}
+        <button className=" px-8 py-2 mx-2 text-orange-600 bg-white border-2 border-white rounded-full" onClick={handleSearch}>搜索出处</button>
+      </div>
+      {file && (
+        <Result isOpen={isResultOpen} onClose={handleResultClose} >
+          {uploadFileResponse
+            ? "data" in uploadFileResponse
+              ? <ResultContent res={uploadFileResponse} />
+              : <ResultContentWithError res={uploadFileResponse} />
+            : <ResultContentFallBack />
+          }
+          {/* <ResultContentFallBack /> */}
+        </Result>
+      )}
     </Container>
-  </>
+    <BottomBar />
+  </>)
 }
+

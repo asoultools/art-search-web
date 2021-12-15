@@ -1,4 +1,4 @@
-import type { CSSProperties, FC } from "react"
+import type { CSSProperties, FC, MouseEvent } from "react"
 import { useRef } from "react"
 import { Transition } from "react-transition-group"
 
@@ -20,7 +20,7 @@ const wrapperTransitionStyles: Record<string, CSSProperties> = {
 type WrapperTransitionStatus = keyof (typeof wrapperTransitionStyles)
 
 const backgroundStyles: CSSProperties = {
-  height: window.innerHeight,
+  height: "100vh",
   width: "100%",
   backgroundColor: "rgba(0, 0, 0, .3)",
   transition: "opacity 400ms cubic-bezier(0.165, 0.840, 0.440, 1.000)"
@@ -45,7 +45,7 @@ const modalStyles: CSSProperties = {
 const modalTransitionStyles: Record<string, CSSProperties> = {
   entering: { transform: "translateY(0%)" },
   entered: { transform: "translateY(0%)" },
-  exiting: { transform: "translateY(-50%)" },
+  exiting: { transform: "translateY(50%)" },
   exited: { transform: "translateY(50%)" }
 }
 

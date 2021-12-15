@@ -1,18 +1,26 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
+import { VitePWA } from 'vite-plugin-pwa'
 
-export default defineConfig(({ }) => {
+export default defineConfig(({ command }) => {
+  const preactAlias = command === "build"
+    ? [
+      { find: "react", replacement: "preact/compat" },
+      { find: "react-dom", replacement: "preact/compat" },
+      { find: "react/jsx-runtime", replacement: "preact/jsx-runtime" }
+    ]
+    : []
+
   return {
     resolve: {
       alias: [
         { find: "~", replacement: "/src" },
-        { find: 'react', replacement: 'preact/compat' },
-        { find: 'react-dom', replacement: 'preact/compat' },
-        { find: 'react/jsx-runtime', replacement: 'preact/jsx-runtime' }
+        ...preactAlias
       ]
     },
     plugins: [
-      react()
+      react(),
+      VitePWA,
     ],
     build: {
       target: "esnext"
