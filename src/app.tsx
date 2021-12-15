@@ -123,7 +123,7 @@ const ImageUploadInput: FC<ImageUploadInputProps> = ({ file, setFile }) => {
 
   return (
     <label
-      className="block w-full h-full flex justify-center items-center cursor-pointer"
+      className="block w-full h-full flex flex-col justify-center items-center cursor-pointer"
       htmlFor="image-upload"
       onDragOver={(e) => {
         e.preventDefault()
@@ -139,6 +139,7 @@ const ImageUploadInput: FC<ImageUploadInputProps> = ({ file, setFile }) => {
       <div className="w-[6rem] fill-white">
         <AiOutlineCloudUpload className="fill-white" size={96} />
       </div>
+      <p className="text-white text-lg">(支持拖拽上传)</p>
     </label>
   )
 }
