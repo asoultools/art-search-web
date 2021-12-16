@@ -3,9 +3,12 @@ import { useEffect, useMemo, useRef, useState } from "react"
 // import { unix } from "dayjs"
 import { AiOutlineCloudUpload, AiOutlineClose, AiOutlineLink, AiOutlineQuestionCircle, AiOutlineCloseCircle } from "react-icons/ai"
 import { Modal } from "./modal"
+import Compressor from 'compressorjs'
 
 import type { FC, ChangeEvent, MouseEvent } from "react"
 import type { UploadFileResponse, UploadFileResponseSuccess, UploadFileResponseError } from "./interface"
+
+const validFileExtensions = [".jpg", ".jpeg", ".bmp", ".png", "webp"]
 
 const Topbar: FC = ({ }) => {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
@@ -135,7 +138,7 @@ const ImageUploadInput: FC<ImageUploadInputProps> = ({ file, setFile }) => {
         setFile(e.dataTransfer.files[0])
       }}
     >
-      <input type="file" id="image-upload" accept="image/*" style={{ display: "none" }} onChange={handleInputChange} ref={inputRef} />
+      <input type="file" id="image-upload" accept="image/jpg,image/jpeg,image/png,image/webp" style={{ display: "none" }} onChange={handleInputChange} ref={inputRef} />
       <div className="w-[6rem] fill-white">
         <AiOutlineCloudUpload className="fill-white" size={96} />
       </div>
@@ -324,23 +327,48 @@ export const App: FC = () => {
     }
   }
 
+  useEffect(() => {
+    if (file) {
+      const isImage = file.type.startsWith("image/")
+      const isValidExt = validFileExtensions.some(ext => file.name.endsWith(ext))
+      const isTooBig = file.size > 1024 * 1024 * 10
+
+      if (!(isImage && isValidExt)) {
+        alert("不支持的图片类型！")
+        setFile(null)
+      }
+      if (isTooBig) {
+        alert("不支持大于10MB的图片")
+        setFile(null)
+      }
+    }
+  }, [file])
+
+
 
   useEffect(() => {
     if (file && isResultOpen) {
-      const method = "POST"
-      const body = new FormData()
-      body.append("file", file)
       // mockFetch()
       // .then(res => setUploadFileResponse(res))
-      fetch(imageUploadUrl, { method, body })
-        .then<UploadFileResponse>(res => res.json())
-        .then(res => setUploadFileResponse(res))
-        .catch(err => {
-          setUploadFileResponse({
-            code: 0,
-            message: "服务器遇到了一些问题"
-          })
-        })
+      new Compressor(file, {
+        quality: 0.5,
+        success: (result: File) => {
+          console.log(result.size / 1024)
+          const method = "POST"
+          const body = new FormData()
+          body.append("file", result)
+          fetch(imageUploadUrl, { method, body })
+            .then<UploadFileResponse>(res => res.json())
+            .then(res => setUploadFileResponse(res))
+            .catch(err => {
+              setUploadFileResponse({
+                code: 0,
+                message: "服务器遇到了一些问题"
+              })
+            })
+        }
+      })
+
     }
   }, [file, isResultOpen])
   return (<>
