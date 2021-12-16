@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react"
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(({ command }) => {
+  const isProduction = "production" === process.env.NODE_ENV
+
   const preactAlias = command === "build"
     ? [
       { find: "react", replacement: "preact/compat" },
@@ -20,7 +22,16 @@ export default defineConfig(({ command }) => {
     },
     plugins: [
       react(),
-      VitePWA,
+      VitePWA({
+        mode: isProduction ? "production" : "development",
+        base: "/",
+        registerType: "autoUpdate",
+        workbox: {
+          cacheId: "pic-asoul-fan-cache",
+          disableDevLogs: isProduction,
+          runtimeCaching: []
+        },
+      }),
     ],
     build: {
       target: "esnext"
