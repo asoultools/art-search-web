@@ -1,13 +1,12 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import { VitePWA } from 'vite-plugin-pwa'
-import { execSync } from "child_process"
 
-const version = execSync("git rev-parse HEAD")
-  .toString()
-  .substring(0, 6)
 
-process.env.VITE_APP_VERSION = version
+process.env.VITE_APP_VERSION = JSON.stringify(process.env.npm_package_version)
+  .replace(/(^"|"$)/g, '')
+
+console.log(process.env.VITE_APP_VERSION)
 
 export default defineConfig(({ command }) => {
   const isProduction = "production" === process.env.NODE_ENV
