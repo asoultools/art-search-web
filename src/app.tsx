@@ -68,6 +68,18 @@ const Topbar: FC = ({ }) => {
   )
 }
 
+const BottomBar: FC = ({ }) => {
+  return (
+    <div className="w-screen h-16 px-4 fixed inset-x-0 bottom-0 flex justify-center items-center">
+      <div className="text-orange-300">
+        <p className="m-4">version: {import.meta.env.VITE_APP_VERSION}</p>
+
+      </div>
+    </div>
+  )
+}
+import.meta.env.VITE_APP_VERSION
+
 const Container: FC = ({ children }) => {
   return <div className="w-screen h-screen overflow-hidden bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500">
     <div className="w-full h-full flex justify-center items-center">
@@ -353,7 +365,6 @@ export const App: FC = () => {
       new Compressor(file, {
         quality: 0.5,
         success: (result: File) => {
-          console.log(result.size / 1024)
           const method = "POST"
           const body = new FormData()
           body.append("file", result)
@@ -396,6 +407,7 @@ export const App: FC = () => {
         </Result>
       )}
     </Container>
+    <BottomBar />
   </>)
 }
 
