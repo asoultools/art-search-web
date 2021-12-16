@@ -21,6 +21,7 @@
     "vite-plugin-pwa": "^0.11.11"
   },
   "dependencies": {
+    "@types/gtag.js": "^0.0.8",
     "dayjs": "^1.10.7",
     "preact": "^10.6.4",
     "react": "^17.0.2",

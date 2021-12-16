@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@preact/preset-vite': ^2.1.5
   '@tailwindcss/line-clamp': ^0.3.0
+  '@types/gtag.js': ^0.0.8
   '@types/react': ^17.0.37
   '@types/react-dom': ^17.0.11
   '@types/react-transition-group': ^4.4.4
@@ -21,6 +22,7 @@ specifiers:
   vite-plugin-pwa: ^0.11.11
 
 dependencies:
+  '@types/gtag.js': 0.0.8
   dayjs: 1.10.7
   preact: 10.6.4
   react: 17.0.2
@@ -1481,6 +1483,10 @@ packages:
   /@types/estree/0.0.39:
     resolution: {integrity: sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==}
     dev: true
+
+  /@types/gtag.js/0.0.8:
+    resolution: {integrity: sha512-xKDygydxruSUNkVbZWjiEbMijz9+xZCLb2yiTiQT88pm5EhIAUhaCo05IZF1HcQc90u4W7cp+7OZNpcJxpyL5g==}
+    dev: false
 
   /@types/node/16.11.12:
     resolution: {integrity: sha512-+2Iggwg7PxoO5Kyhvsq9VarmPbIelXP070HMImEpbtGCoyWNINQj4wzjbQCXzdHTRXnqufutJb5KAURZANNBAw==}

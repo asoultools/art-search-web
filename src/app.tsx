@@ -172,11 +172,25 @@ const ProgressCircle: FC<ProgressCircle> = ({ progress }) => {
 
 const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max)
 
+
+
 type ResultContentProps = {
+  file: File
   res: UploadFileResponseSuccess
 }
 
-const ResultContent: FC<ResultContentProps> = ({ res }) => {
+const ResultContent: FC<ResultContentProps> = ({ res, file }) => {
+  const matchpics = res.data
+    .map(item => `${item.detail.dynamic_id}_${item.detail.dynamic_index}`)
+    .join(",")
+  useEffect(() => {
+    if (gtag) {
+      gtag("event", "search_pic_success", {
+        filename: file.name,
+        matchpics
+      })
+    }
+  }, [])
   return (
     <div className="w-full h-full">
       {res.data.map(item => (
@@ -209,10 +223,19 @@ const ResultContent: FC<ResultContentProps> = ({ res }) => {
 }
 
 type ResultContentWithErrorProps = {
+  file: File
   res: UploadFileResponseError
 }
 
-const ResultContentWithError: FC<ResultContentWithErrorProps> = ({ res }) => {
+const ResultContentWithError: FC<ResultContentWithErrorProps> = ({ res, file }) => {
+  useEffect(() => {
+    if (gtag) {
+      gtag("event", "search_pic_error", {
+        filename: file.name,
+        message: res.message
+      })
+    }
+  }, [])
   return (
     <div className="w-full h-full p-4">
       <div className="p-4 bg-red-200 rounded-xl text-red-500">
@@ -337,8 +360,8 @@ export const App: FC = () => {
         <Result isOpen={isResultOpen} onClose={handleResultClose} >
           {uploadFileResponse
             ? "data" in uploadFileResponse
-              ? <ResultContent res={uploadFileResponse} />
-              : <ResultContentWithError res={uploadFileResponse} />
+              ? <ResultContent file={file} res={uploadFileResponse} />
+              : <ResultContentWithError file={file} res={uploadFileResponse} />
             : <ResultContentFallBack />
           }
           {/* <ResultContentFallBack /> */}
