@@ -9,8 +9,6 @@ process.env.VITE_APP_VERSION = JSON.stringify(process.env.npm_package_version)
 console.log(process.env.VITE_APP_VERSION)
 
 export default defineConfig(({ command }) => {
-  const isProduction = "production" === process.env.NODE_ENV
-
   const preactAlias = command === "build"
     ? [
       { find: "react", replacement: "preact/compat" },
@@ -29,18 +27,12 @@ export default defineConfig(({ command }) => {
     plugins: [
       react(),
       VitePWA({
-        mode: isProduction ? "production" : "development",
-        base: "/",
         registerType: "autoUpdate",
         workbox: {
           cacheId: "pic-asoul-fan-cache",
-          disableDevLogs: isProduction,
           runtimeCaching: []
         },
       }),
-    ],
-    build: {
-      target: "esnext"
-    }
+    ]
   }
 })
