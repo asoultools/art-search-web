@@ -1,15 +1,16 @@
 export type UploadFileResponse = UploadFileResponseSuccess | UploadFileResponseError
 
 export type UploadFileResponseSuccess = {
-  code: number
+  code: 0
   message: string
-  data: DataEntity[]
   last_time: number
+  data: DataEntity[]
 }
 
 export type UploadFileResponseError = {
-  code: number
+  code: -1
   message: string
+  last_time: number
 }
 
 export type DataEntity = {
