@@ -309,7 +309,7 @@ export const Result: FC<ResultProps> = ({ isOpen, onClose, children }) => {
   )
 }
 
-const imageUploadUrl = import.meta.env.VITE_APP_IMAGE_UPLOAD_URL
+const imageUploadUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/api/uploadfile`
 
 export const App: FC = () => {
   const [file, setFile] = useState<File | null>(null)
