@@ -1,5 +1,5 @@
 {
-  "name": "asoulartsearchweb",
+  "name": "art-search-web",
   "version": "0.1.0",
   "scripts": {
     "dev": "vite --host",
