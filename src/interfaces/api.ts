@@ -3,14 +3,12 @@ export type UploadFileResponse = UploadFileResponseSuccess | UploadFileResponseE
 export type UploadFileResponseSuccess = {
   code: 0
   message: string
-  last_time: number
   data: DataEntity[]
 }
 
 export type UploadFileResponseError = {
   code: -1
   message: string
-  last_time: number
 }
 
 export type DataEntity = {

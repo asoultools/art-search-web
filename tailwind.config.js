@@ -1,8 +1,5 @@
 module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{ts,tsx}"
-  ],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -30,12 +27,10 @@ module.exports = {
           "Segoe UI Emoji",
           "Segoe UI Symbol",
           "Noto Color Emoji",
-          "sans-serif"
-        ]
-      }
+          "sans-serif",
+        ],
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/line-clamp')
-  ]
+  plugins: [require("@tailwindcss/line-clamp")],
 }

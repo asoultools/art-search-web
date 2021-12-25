@@ -1,9 +1,9 @@
-import { Dispatch, useEffect } from "react"
+import type { Dispatch } from "react"
+import { useEffect } from "react"
 
 const validFileExtensions = [".jpg", ".jpeg", ".png", "webp"]
 
 export const useValidImage = (file: File | null, setFile: Dispatch<File | null>, onNotValid: (msg: string) => void) => {
-
   useEffect(() => {
     if (file) {
       const isImage = file.type.startsWith("image/")
@@ -22,7 +22,3 @@ export const useValidImage = (file: File | null, setFile: Dispatch<File | null>,
     }
   }, [file, setFile, onNotValid])
 }
-
-
-
-

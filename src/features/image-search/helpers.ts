@@ -1,6 +1,5 @@
-import Compressor from 'compressorjs'
-
-import type { UploadFileResponse } from "../interface"
+import Compressor from "compressorjs"
+import type { UploadFileResponse } from "~/interfaces/api"
 
 export const compressImage = (file: File, quality: number): Promise<File> => {
   return new Promise((resolve, reject) => {
@@ -11,10 +10,12 @@ export const compressImage = (file: File, quality: number): Promise<File> => {
 }
 
 export const uploadImage = async (file: File): Promise<UploadFileResponse> => {
-  const url = import.meta.env.VITE_APP_IMAGE_UPLOAD_URL
+  const url = `${import.meta.env.VITE_APP_API_BASE_URL}/api/uploadfile`
   const method = "POST"
   const body = new FormData()
   body.append("file", file)
-  return fetch(url, { method, body })
-    .then(res => res.json())
+  return fetch(url, {
+    method,
+    body,
+  }).then(res => res.json()) as Promise<UploadFileResponse>
 }
