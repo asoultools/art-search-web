@@ -3,11 +3,17 @@ import { useEffect } from "react"
 
 const validFileExtensions = [".jpg", ".jpeg", ".png", "webp"]
 
-export const useValidImage = (file: File | null, setFile: Dispatch<File | null>, onNotValid: (msg: string) => void) => {
+export const useValidImage = (
+  file: File | null,
+  setFile: Dispatch<File | null>,
+  onNotValid: (msg: string) => void,
+) => {
   useEffect(() => {
     if (file) {
       const isImage = file.type.startsWith("image/")
-      const isValidExt = validFileExtensions.some(ext => file.name.endsWith(ext))
+      const isValidExt = validFileExtensions.some(ext =>
+        file.name.endsWith(ext),
+      )
       const isTooBig = file.size > 1024 * 1024 * 10
 
       if (!(isImage && isValidExt)) {

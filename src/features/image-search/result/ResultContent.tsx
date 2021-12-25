@@ -51,7 +51,7 @@ export const ResultContent: FC<ResultContentProps> = ({ res }) => {
           </div>
         ))
       ) : (
-        <div className="m-4 bg-red-200 rounded-xl text-red-500">
+        <div className="m-4 p-4 bg-red-200 rounded-xl text-red-500">
           {res.message}
         </div>
       )}

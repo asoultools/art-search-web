@@ -62,7 +62,10 @@ export const Modal: FC<ModalProps> = ({ children, isOpen }) => {
   return (
     <Transition in={isOpen} timeout={400} nodeRef={refWrapper}>
       {(state: WrapperTransitionStatus) => (
-        <div ref={refWrapper} style={{ ...wrapperStyles, ...wrapperTransitionStyles[state] }}>
+        <div
+          ref={refWrapper}
+          style={{ ...wrapperStyles, ...wrapperTransitionStyles[state] }}
+        >
           <Transition in={isOpen} timeout={400} nodeRef={refBackground}>
             {(state: BackgroundTransitionStatus) => (
               <div
@@ -98,7 +101,10 @@ type ModalContainerProps = {
   onClick: () => void
 }
 
-export const ModalContainer: FC<ModalContainerProps> = ({ children, onClick }) => {
+export const ModalContainer: FC<ModalContainerProps> = ({
+  children,
+  onClick,
+}) => {
   return (
     <div
       className="w-full h-full flex flex-col justify-end md:justify-center items-center"
@@ -108,7 +114,9 @@ export const ModalContainer: FC<ModalContainerProps> = ({ children, onClick }) =
       tabIndex={0}
     >
       <div className="w-full h-[85vh] max-w-[40rem] max-h-[40rem] bg-white shadow-md rounded-2xl md:rounded">
-        <div className="w-full h-full flex flex-col items-center divide-y-2">{children}</div>
+        <div className="w-full h-full flex flex-col items-center divide-y-2">
+          {children}
+        </div>
       </div>
     </div>
   )
@@ -122,7 +130,10 @@ export const ModalTitle: FC<ModalTitleProps> = ({ title, onClose }) => {
   return (
     <div className="w-full flex justify-between items-center">
       <h2 className="p-4 font-bold">{title}</h2>
-      <button className="w-14 h-14 flex justify-center items-center focus:outline-none" onClick={onClose}>
+      <button
+        className="w-14 h-14 flex justify-center items-center focus:outline-none"
+        onClick={onClose}
+      >
         <AiOutlineClose size={18} />
       </button>
     </div>
@@ -130,5 +141,9 @@ export const ModalTitle: FC<ModalTitleProps> = ({ title, onClose }) => {
 }
 
 export const ModalBody: FC = ({ children }) => {
-  return <div className="w-full overflow-y-scroll flex flex-col justify-center items-center">{children}</div>
+  return (
+    <div className="w-full overflow-y-scroll flex flex-col justify-center items-center">
+      {children}
+    </div>
+  )
 }

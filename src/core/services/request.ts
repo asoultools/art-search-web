@@ -6,7 +6,9 @@ export type FetchOptions = {
 }
 
 export const fetchJson = <R>({ url, method, headers, body }: FetchOptions) =>
-  window.fetch(url, { method, headers, body }).then(res => res.json()) as Promise<R>
+  window
+    .fetch(url, { method, headers, body })
+    .then(res => res.json()) as Promise<R>
 
 export const fetchText = ({ url, method, headers, body }: FetchOptions) =>
   window.fetch(url, { method, headers, body }).then(res => res.text())
