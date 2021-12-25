@@ -1,4 +1,6 @@
-export type UploadFileResponse = UploadFileResponseSuccess | UploadFileResponseError
+export type UploadFileResponse =
+  | UploadFileResponseSuccess
+  | UploadFileResponseError
 
 export type UploadFileResponseSuccess = {
   code: 0

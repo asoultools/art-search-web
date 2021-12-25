@@ -4,7 +4,7 @@ import type { FC } from "react"
 export const ResultFallBack: FC = ({}) => {
   return (
     <div className="w-full h-full">
-      {[0, 1, 2, 3].map(i => (
+      {[0, 1, 2].map(i => (
         <div
           className="animate-pulse m-4 bg-orange-200 rounded-xl overflow-hidden shadow flex"
           key={i}
