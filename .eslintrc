@@ -1,0 +1,43 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "extends": ["eslint:recommended", "prettier"],
+  "rules": {
+    "no-empty-pattern": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts?(x)"],
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "plugin:react-hooks/recommended",
+        "plugin:jsx-a11y/recommended",
+        "prettier"
+      ],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "settings": {
+        "react": {
+          "version": "detect"
+        }
+      },
+      "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error",
+        "@typescript-eslint/consistent-type-exports": "error",
+        "@typescript-eslint/consistent-type-imports": "error"
+      }
+    }
+  ]
+}

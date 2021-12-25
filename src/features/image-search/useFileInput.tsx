@@ -2,7 +2,11 @@ import { useEffect } from "react"
 
 import type { RefObject, Dispatch, DragEvent, ChangeEvent } from "react"
 
-export const useFileInput = (inputRef: RefObject<HTMLInputElement>, file: File | null, setFile: Dispatch<File | null>) => {
+export const useFileInput = (
+  inputRef: RefObject<HTMLInputElement>,
+  file: File | null,
+  setFile: Dispatch<File | null>,
+) => {
   const input = inputRef.current
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
