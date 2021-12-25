@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
-/// <reference types="gtag.js" />
 
 interface ImportMetaEnv {
-  VITE_APP_IMAGE_UPLOAD_URL: string
+  VITE_APP_VERSION
+  VITE_APP_API_BASE_URL: string
 }
